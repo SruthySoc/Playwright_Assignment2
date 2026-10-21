@@ -25,3 +25,12 @@ async def firefox_page():
         context = await browser.new_context()
         page = await context.new_page()
         yield page
+
+@pytest.mark.asyncio
+async def test_scroll(async_page):
+    await async_page.goto("https://testautomationpractice.blogspot.com/")
+    s = async_page.locator("//div[@id = 'draggable']")
+    await s.scroll_into_view_if_needed()
+    d = async_page.locator("//div[@id = 'droppable']")
+    await s.drag_to(d)
+
