@@ -34,3 +34,21 @@ async def test_scroll(async_page):
     d = async_page.locator("//div[@id = 'droppable']")
     await s.drag_to(d)
 
+@pytest_asyncio.fixture
+async def async_page():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=False) # chromebrowser
+        context = await browser.new_context(storage_state=".auth/loginsession.json")
+        page = await context.new_page() # page
+        yield  page
+        await browser.close()
+
+@pytest.fixture
+def approved_product_api():
+    return {
+        "source_endpoint": "mock://trainer-product-api/products/123",
+        "product": {
+            "id": "123",
+            "title": "Logitech Wireless Mouse",
+        },
+    }
